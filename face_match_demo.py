@@ -12,9 +12,9 @@ args = parser.parse_args()
 
 # some constants kept as default from facenet
 minsize = 20
-threshold = [0.6, 0.7, 0.7]
+threshold = [0.6, 0.8, 0.9]
 factor = 0.709
-margin = 44
+margin = 0
 input_image_size = 160
 
 sess = tf.Session()
@@ -37,7 +37,7 @@ def getFace(img):
     bounding_boxes, _ = detect_face.detect_face(img, minsize, pnet, rnet, onet, threshold, factor)
     if not len(bounding_boxes) == 0:
         for face in bounding_boxes:
-            if face[4] > 0.50:
+            if face[4] > 0.95:
                 det = np.squeeze(face[0:4])
                 bb = np.zeros(4, dtype=np.int32)
                 bb[0] = np.maximum(det[0] - margin / 2, 0)

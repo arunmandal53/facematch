@@ -11,9 +11,9 @@ args = parser.parse_args()
 
 # some constants kept as default from facenet
 minsize = 20
-threshold = [0.6, 0.7, 0.7]
-factor = 0.709
-margin = 44
+threshold = [0.6, 0.8, 0.9]
+factor = 0.709 #709
+margin = 0
 input_image_size = 160
 
 sess = tf.Session()
@@ -26,7 +26,8 @@ def getFace(img):
     bounding_boxes, _ = detect_face.detect_face(img, minsize, pnet, rnet, onet, threshold, factor)
     if not len(bounding_boxes) == 0:
         for face in bounding_boxes:
-            if face[4] > 0.50:
+            print(face[4])
+            if face[4] > 0.95:
                 det = np.squeeze(face[0:4])
                 bb = np.zeros(4, dtype=np.int32)
                 bb[0] = np.maximum(det[0] - margin / 2, 0)
@@ -39,10 +40,19 @@ def getFace(img):
     return faces
 
 img = cv2.imread(args.img)
-img = imutils.resize(img,width=1000)
+h,w = img.shape[:2]
+print(h)
+print(w)
+if h > 800:
+    img = imutils.resize(img,height=800)
+if w > 800:
+    img = imutils.resize(img, width=800)
 faces = getFace(img)
+
 for face in faces:
     cv2.rectangle(img, (face['rect'][0], face['rect'][1]), (face['rect'][2], face['rect'][3]), (0, 255, 0), 2)
+    cv2.imshow("each_face", face['face'])
+    cv2.waitKey(0)
 cv2.imshow("faces", img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
