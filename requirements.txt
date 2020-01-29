@@ -27,7 +27,7 @@ scipy==1.0.0
 six==1.11.0
 sklearn==0.0
 tensorboard==1.12.2
-tensorflow==1.12.2
+tensorflow==1.15.2
 termcolor==1.1.0
 Werkzeug==0.16.0
 wrapt==1.10.11
